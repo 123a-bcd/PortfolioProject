@@ -3,7 +3,7 @@ select *
 from Portfolio.dbo.NashvilleHousing
 
 
--- Standardize Date Format
+-- Standardizing Date Format in SaleDate Field
 select SaleDateConverted, convert(date,SaleDate)
 from Portfolio.dbo.NashvilleHousing
 
@@ -22,7 +22,7 @@ set SaleDateConverted = convert(date,SaleDate)
 
 
 
--- Populate Property Address data
+-- Populating Missing Property Address Data
 select p1.ParcelID, p1.PropertyAddress, p1.ParcelID, p2.PropertyAddress, isnull(p1.PropertyAddress,p2.PropertyAddress)
 from Portfolio.dbo.NashvilleHousing as p1
 join Portfolio.dbo.NashvilleHousing as p2
@@ -41,7 +41,7 @@ where p1.PropertyAddress is null
 
 
 
--- Breaking out Address into Individual Columns (Addressm, City, State)
+-- Breaking Address into Individual Columns (Address, City, State)
 select PropertyAddress
 from Portfolio.dbo.NashvilleHousing
 
@@ -70,7 +70,7 @@ select *
 from Portfolio.dbo.NashvilleHousing
 
 
-
+-- Splitting Owner Address into Separate Columns (Address, City, State)
 select OwnerAddress
 from Portfolio.dbo.NashvilleHousing
 
@@ -103,7 +103,7 @@ set OwnerSplitStates = parsename(replace(OwnerAddress,',','.'),1)
 
 
 
--- Change Y and N to Yes and No in 'Sold as vacant' field
+-- Standardizing 'Sold as Vacant' Field (Y/N to Yes/No)
 select distinct(SoldAsVacant), count(SoldAsVacant)
 from Portfolio.dbo.NashvilleHousing
 group by SoldAsVacant
@@ -124,7 +124,7 @@ set SoldAsVacant = case when SoldAsVacant = 'Y' then 'Yes'
 						end
 
 
--- Remove Duplicate
+-- Removing Duplicate Records from Nashville Housing
 with RowNumCTE as (
 select *,
 ROW_NUMBER() over (
@@ -147,7 +147,7 @@ where row_num > 1
 
 
 
--- Deleted Unused Columns
+-- Dropping Unused Columns from Nashville Housing Table
 
 
 select *
